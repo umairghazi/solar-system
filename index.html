@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Solar System</title>
+    <!--Custom font-->
+    <link href='http://fonts.googleapis.com/css?family=Lato&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <!--Custom Styles-->
+    <style>
+    #topBar {
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: auto;
+        background-color: #0ac5f4;
+        color: white;
+        text-align: center;
+        margin-bottom: 2px;
+        padding: 5px;
+    }
+    
+    #topBar span {
+        font: 100 44px/1 'lato';
+    }
+    
+    body {
+        background-color: black;
+        font-family: 'Lato', serif;
+    }
+    </style>
+    <!--jQuery Library-->
+    <script src="jquery-1.11.3.js"></script>
+    <!--JavaScript library that enables panning and zooming of an SVG in an HTML document, with mouse events from https://github.com/ariutta/svg-pan-zoom-->
+    <script src="svg-pan-zoom.js"></script>
+    <!--Global vars for SVG namespace-->
+    <script>
+    var svgNS = "http://www.w3.org/2000/svg";
+    xmlns = "http://www.w3.org/1999/xlink";
+    </script>
+    <script type="text/javascript" src="script.js"></script>
+</head>
+
+<body>
+    <div id="topBar">
+        <span>The Solar System!</span>
+    </div>
+    <!--Buttons to dynamically create planet and planet orbits-->
+    <div id="selection">
+        <button onclick="createOrbit(pathMercury,'pathOfMercury','url(#mercuryImage)');">Create Mercury Orbit!</button>
+        <button onclick="animatePlanet(50,'url(#mercuryImage)','mercury','#pathOfMercury',tpMercury);">Create Mercury!</button>
+        <button onclick="createOrbit(pathVenus,'pathOfVenus','url(#venusImage)');">Create Venus Orbit!</button>
+        <button onclick="animatePlanet(75,'url(#venusImage)','venus','#pathOfVenus',tpVenus);">Create Venus!</button>
+        <button onclick="createOrbit(pathEarth,'pathOfEarth','url(#earthImage)');">Create Earth Orbit!</button>
+        <button onclick="animatePlanet(100,'url(#earthImage)','earth','#pathOfEarth',tpEarth);">Create Earth!</button>
+        <button onclick="createOrbit(pathMars,'pathOfMars','url(#marsImage)');">Create Mars Orbit!</button>
+        <button onclick="animatePlanet(53,'url(#marsImage)','mars','#pathOfMars',tpMars);">Create Mars!</button>
+        <button onclick="createOrbit(pathJupiter,'pathOfJupiter','url(#jupiterImage)');">Create Jupiter Orbit!</button>
+        <button onclick="animatePlanet(500,'url(#jupiterImage)','jupiter','#pathOfJupiter',tpJupiter);">Create Jupiter!</button>
+        <button onclick="createOrbit(pathSaturn,'pathOfSaturn','url(#saturnImage)');">Create Saturn Orbit!</button>
+        <button onclick="animatePlanet(350,'url(#saturnImage)','saturn','#pathOfSaturn',tpSaturn);">Create Saturn!</button>
+        <button onclick="createOrbit(pathUranus,'pathOfUranus','url(#uranusImage)');">Create Uranus orbit!</button>
+        <button onclick="animatePlanet(250,'url(#uranusImage)','uranus','#pathOfUranus',tpUranus);">Create Uranus!</button>
+        <button onclick="createOrbit(pathNeptune,'pathOfNeptune','url(#neptuneImage)');">Create Neptune Orbit!</button>
+        <button onclick="animatePlanet(170,'url(#neptuneImage)','neptune','#pathOfNeptune',tpNeptune);">Create Neptune!</button>
+        <button onclick="glowSun();">Glow Sun</button>
+    </div>
+    <div id="svgArea">
+        <svg id="world" height="636" version="1.1" width="1280" xmlns="http://www.w3.org/2000/svg" viewBox="153 159 1280 1280">
+            <defs>
+                <!--Gradient for Sun's color-->
+                <radialGradient id="grad1" fx="0.5" fy="0.5" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+                    <stop offset="0%" stop-color="#ff0033" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></stop>
+                    <stop offset="80%" stop-color="#ff9933" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></stop>
+                    <stop offset="100%" stop-color="#ffff33" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></stop>
+                </radialGradient>
+                <!--Planet images-->
+                <pattern id="mercuryImage" x="0%" y="0%" height="100%" width="100%" viewBox="0 0 512 512">
+                    <image x="0%" y="0%" width="512" height="512" xlink:href="images/mercury.png"></image>
+                </pattern>
+                <pattern id="venusImage" x="0%" y="0%" height="100%" width="100%" viewBox="0 0 512 512">
+                    <image x="0%" y="0%" width="512" height="512" xlink:href="images/venus.png"></image>
+                </pattern>
+                <pattern id="earthImage" x="0%" y="0%" height="100%" width="100%" viewBox="0 0 512 512">
+                    <image x="0%" y="0%" width="512" height="512" xlink:href="images/earth.png"></image>
+                </pattern>
+                <pattern id="marsImage" x="0%" y="0%" height="100%" width="100%" viewBox="0 0 512 512">
+                    <image x="0%" y="0%" width="512" height="512" xlink:href="images/mars.png"></image>
+                </pattern>
+                <pattern id="jupiterImage" x="0%" y="0%" height="100%" width="100%" viewBox="0 0 512 512">
+                    <image x="0%" y="0%" width="512" height="512" xlink:href="images/jupiter.png"></image>
+                </pattern>
+                <pattern id="saturnImage" x="0%" y="0%" height="100%" width="100%" viewBox="0 0 512 512">
+                    <image x="0%" y="0%" width="512" height="512" xlink:href="images/saturn.png"></image>
+                </pattern>
+                <pattern id="uranusImage" x="0%" y="0%" height="100%" width="100%" viewBox="0 0 512 512">
+                    <image x="0%" y="0%" width="512" height="512" xlink:href="images/uranus.png"></image>
+                </pattern>
+                <pattern id="neptuneImage" x="0%" y="0%" height="100%" width="100%" viewBox="0 0 512 512">
+                    <image x="0%" y="0%" width="512" height="512" xlink:href="images/neptune.png"></image>
+                </pattern>
+            </defs>
+            <!--Sun-->
+            <circle id="sun" cx="800" cy="400" r="40" fill="url(#grad1)" stroke="#ffa500" opacity="1" fill-opacity="1"></circle>
+            <!--Pan and Zoom -->
+            <script>
+            var svg = document.getElementsByTagName('svg')[0];
+            svg.onload = function() {
+                svgPanZoom('#world', {
+                    zoomEnabled: true,
+                    controlIconsEnabled: true,
+                    fit: true,
+                    center: true,
+                    minZoom: 0.1
+                });
+            };
+            </script>
+        </svg>
+    </div>
+</body>
+
+</html>
